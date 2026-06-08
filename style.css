@@ -19,7 +19,6 @@ h1{
     text-align:center;
     margin-bottom:20px;
 }
-
 textarea{
     width:100%;
     height:250px;
@@ -66,7 +65,7 @@ button{
 
 #receipt{
     width:10cm;
-    height:16cm;
+    height:20cm;
     background:white;
     margin:25px auto;
     padding:15px;
@@ -239,7 +238,7 @@ button{
 
     #receipt{
         max-width:100%;
-        padding:8px;
+        padding:12px;
     }
 
     .receipt-title{
