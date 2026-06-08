@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur de Reçu</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- PWA Meta Tags -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ReçuGen">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#00a651">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Générateur de Reçu</h1>
+
+    <textarea id="rawText" placeholder="Collez le texte du reçu ici..."></textarea>
+
+    <input type="number" id="extraValue" placeholder="Montant à ajouter (BRL)" value="0">
+
+    <button class="generate-btn" onclick="generateReceipt()">
+        Générer le reçu
+    </button>
+
+    
+
+    <div id="receiptContainer"></div>
+
+    <div class="actions">
+        <button onclick="downloadReceipt()">
+            📥 Télécharger PNG
+        </button>
+
+        <button onclick="shareReceipt()">
+            📱 Partager WhatsApp
+        </button>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
