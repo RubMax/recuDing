@@ -135,7 +135,6 @@ function generateReceipt(){
             <div>✓ Xerox</div>
             <div>✓ Imprimir</div>
             <div>✓ Plastificar</div>
-            
         </div>
     </div>
 </div>
