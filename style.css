@@ -63,14 +63,23 @@ button{
 
 /* REÇU */
 
-#receipt{
-    width:10cm;
-    height:20cm;
-    background:white;
-    margin:25px auto;
-    padding:15px;
-    border:1px solid #dcdcdc;
-    overflow:hidden;
+#receipt {
+    width: 100%;
+    max-width: 380px;
+    min-height: auto;  /* Changé de 530px à auto */
+    background: #fff;
+    margin: 25px auto;
+    padding: 15px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    height: auto;  /* S'adapte au contenu */
+}
+
+@media (max-width: 600px) {
+    #receipt {
+        min-height: auto;
+        padding: 20px 15px;
+    }
 }
 
 .success-circle{
