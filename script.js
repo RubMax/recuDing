@@ -132,8 +132,10 @@ function generateReceipt(){
             <div>✓ Depo US$ Haiti</div>
         </div>
         <div class="services-column">
+            <div>✓ Xerox</div>
+            <div>✓ Imprimir</div>
+            <div>✓ Plastificar</div>
             
-            <div>✓ </div>
         </div>
     </div>
 </div>
