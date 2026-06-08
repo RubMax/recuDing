@@ -325,13 +325,14 @@ button{
 }
 
 /* Version responsive pour mobile */
+.services-two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* 2 colonnes égales */
+    gap: 15px;
+}
+
 @media (max-width: 600px) {
     .services-two-columns {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .services-box {
-        font-size: 10px;
+        grid-template-columns: 1fr;  /* 1 colonne sur mobile */
     }
 }
