@@ -230,7 +230,7 @@ button{
     }
 
     h1{
-        font-size:22px;
+        font-size:42px;
     }
 
     .actions{
@@ -243,15 +243,15 @@ button{
     }
 
     .receipt-title{
-        font-size:18px;
+        font-size:22px;
     }
 
     .row{
-        font-size:13px;
+        font-size:18px;
     }
 
     .services-box{
-        font-size:14px;
+        font-size:118px;
     }
 }
 
