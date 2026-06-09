@@ -19,6 +19,7 @@ h1{
     text-align:center;
     margin-bottom:20px;
 }
+
 textarea{
     width:100%;
     height:250px;
@@ -63,23 +64,14 @@ button{
 
 /* REÇU */
 
-#receipt {
-    width: 100%;
-    max-width: 380px;
-    min-height: auto;  /* Changé de 530px à auto */
-    background: #fff;
-    margin: 25px auto;
-    padding: 15px;
-    border: 1px solid #dcdcdc;
-    border-radius: 6px;
-    height: auto;  /* S'adapte au contenu */
-}
-
-@media (max-width: 600px) {
-    #receipt {
-        min-height: auto;
-        padding: 20px 15px;
-    }
+#receipt{
+    width:10cm;
+    height:16cm;
+    background:white;
+    margin:25px auto;
+    padding:15px;
+    border:1px solid #dcdcdc;
+    overflow:hidden;
 }
 
 .success-circle{
@@ -238,7 +230,7 @@ button{
     }
 
     h1{
-        font-size:42px;
+        font-size:22px;
     }
 
     .actions{
@@ -247,19 +239,19 @@ button{
 
     #receipt{
         max-width:100%;
-        padding:12px;
+        padding:8px;
     }
 
     .receipt-title{
-        font-size:22px;
+        font-size:14px;
     }
 
     .row{
-        font-size:18px;
+        font-size:13px;
     }
 
     .services-box{
-        font-size:118px;
+        font-size:10px;
     }
 }
 
@@ -299,14 +291,14 @@ button{
     background: #f7f7f7;
     border: 1px solid #dcdcdc;
     border-radius: 4px;
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 18px;
+    line-height: 1.2;
 }
 
 .services-title {
     font-weight: bold;
     color: #008f4c;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     text-align: center;  /* Centre le titre */
 }
 
@@ -325,14 +317,53 @@ button{
 }
 
 /* Version responsive pour mobile */
-.services-two-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;  /* 2 colonnes égales */
-    gap: 15px;
-}
-
 @media (max-width: 600px) {
     .services-two-columns {
-        grid-template-columns: 1fr;  /* 1 colonne sur mobile */
+        flex-direction: column;
+        gap: 5px;
     }
+    
+    .services-box {
+        font-size: 16px;
+    }
+}
+/* Animation pour l'input rouge */
+.red-highlight {
+    border: 2px solid #ff0000 !important;
+    background-color: #ffe6e6 !important;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5) !important;
+}
+
+.blink-animation {
+    animation: blinkRed 0.5s ease-in-out 5;
+}
+
+@keyframes blinkRed {
+    0% {
+        border-color: #ff0000;
+        background-color: #ffe6e6;
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+        border-color: #ff6666;
+        background-color: #fff0f0;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+    }
+    100% {
+        border-color: #ff0000;
+        background-color: #ffe6e6;
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+}
+
+/* Style pour le champ extraValue */
+#extraValue {
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+#extraValue:focus {
+    outline: none;
+    border-color: #00a651;
+    box-shadow: 0 0 5px rgba(0, 166, 81, 0.3);
 }

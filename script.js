@@ -11,105 +11,85 @@ function getValue(lines, label){
     return "";
 }
 
-function generateReceipt(){
-
-    const raw = document
-    .getElementById("rawText")
-    .value;
-
-    const extra = parseFloat(
-        document.getElementById("extraValue").value
-    ) || 0;
-
-    const lines = raw
-    .split("\n")
-    .map(x=>x.trim())
-    .filter(x=>x);
-
-    const reference = getValue(lines,"Référence");
-    const etat = getValue(lines,"État");
-    const date = getValue(lines,"Date");
-    const pays = getValue(lines,"Pays");
-    const operateur = getValue(lines,"Opérateur");
-    const produit = getValue(lines,"Type de produit");
-    const montantEnvoye = getValue(lines,"Montant envoyé");
-    const montantRecu = getValue(lines,"Montant reçu");
-    const numero = getValue(lines,"Numéro de destination");
-
-    let brl = montantEnvoye
-        .replace("BRL","")
-        .replace(",",".")
-        .trim();
-
-    brl = parseFloat(brl);
-
-    const total = brl + extra;
-
-    const montantFinal =
-        total.toFixed(2)
-        .replace(".",",")
-        +" BRL";
-
-    document.getElementById("receiptContainer").innerHTML = `
+function generateReceipt() {
+    // Efface les messages d'erreur précédents
+    clearErrorMessage();
     
-    <div id="receipt">
+    // Vérifie la valeur extra avant de continuer
+    if (!validateExtraValueBeforeGenerate()) {
+        return;  // Stop la génération si l'utilisateur annule
+    }
+    
+    const raw = document.getElementById("rawText").value;
+    const extra = parseFloat(document.getElementById("extraValue").value) || 0;
+    const lines = raw.split("\n").map(x => x.trim()).filter(x => x);
 
-        <div class="success-circle">
-            ✓
-        </div>
+    const reference = getValue(lines, "Référence");
+    const etat = getValue(lines, "État");
+    const date = getValue(lines, "Date");
+    const pays = getValue(lines, "Pays");
+    const operateur = getValue(lines, "Opérateur");
+    const produit = getValue(lines, "Type de produit");
+    const montantEnvoye = getValue(lines, "Montant envoyé");
+    const montantRecu = getValue(lines, "Montant reçu");
+    const numero = getValue(lines, "Numéro de destination");
 
-        <div class="receipt-title">
-            CONFIRMATION DE COMMANDE
-        </div>
+    // Validation des données
+    if (!validateReceiptData(reference, numero)) {
+        document.getElementById("receiptContainer").innerHTML = "";
+        return;
+    }
 
-        <div class="separator"></div>
+    let brl = montantEnvoye.replace("BRL", "").replace(",", ".").trim();
+    brl = parseFloat(brl);
+    const total = brl + extra;
+    const montantFinal = total.toFixed(2).replace(".", ",") + " BRL";
 
-        <div class="row">
-            <div class="label">Référence</div>
-            <div class="value">${reference}</div>
-        </div>
+    // Le reste de votre code de génération...
+    document.getElementById("receiptContainer").innerHTML = `
+        <div id="receipt">
+            <div class="success-circle">✓</div>
+            <div class="receipt-title">CONFIRMATION DE COMMANDE</div>
+            <div class="separator"></div>
 
-        <div class="row">
-            <div class="label">État</div>
-            <div class="value">${etat}</div>
-        </div>
+            <div class="row">
+                <div class="label">Référence</div>
+                <div class="value">${reference}</div>
+            </div>
+            <div class="row">
+                <div class="label">État</div>
+                <div class="value">${etat}</div>
+            </div>
+            <div class="row">
+                <div class="label">Date</div>
+                <div class="value">${date}</div>
+            </div>
+            <div class="row">
+                <div class="label">Pays</div>
+                <div class="value">${pays}</div>
+            </div>
+            <div class="row">
+                <div class="label">Opérateur</div>
+                <div class="value">${operateur}</div>
+            </div>
+            <div class="row">
+                <div class="label">Type de produit</div>
+                <div class="value">${produit}</div>
+            </div>
+            <div class="row">
+                <div class="label">Montant envoyé</div>
+                <div class="value">${montantFinal}</div>
+            </div>
+            <div class="row">
+                <div class="label">Montant reçu</div>
+                <div class="value">${montantRecu}</div>
+            </div>
+            <div class="row">
+                <div class="label">Numéro destination</div>
+                <div class="value">${numero}</div>
+            </div>
 
-        <div class="row">
-            <div class="label">Date</div>
-            <div class="value">${date}</div>
-        </div>
-
-        <div class="row">
-            <div class="label">Pays</div>
-            <div class="value">${pays}</div>
-        </div>
-
-        <div class="row">
-            <div class="label">Opérateur</div>
-            <div class="value">${operateur}</div>
-        </div>
-
-        <div class="row">
-            <div class="label">Type de produit</div>
-            <div class="value">${produit}</div>
-        </div>
-
-        <div class="row">
-            <div class="label">Montant envoyé</div>
-            <div class="value">${montantFinal}</div>
-        </div>
-
-        <div class="row">
-            <div class="label">Montant reçu</div>
-            <div class="value">${montantRecu}</div>
-        </div>
-
-        <div class="row">
-            <div class="label">Numéro destination</div>
-            <div class="value">${numero}</div>
-        </div>
-
-        <div class="separator"></div>
+            <div class="separator"></div>
 
         <div class="footer-links">
     <span>Impression d'un reçu</span>
@@ -117,13 +97,12 @@ function generateReceipt(){
 </div>
 
 
+<!-- Dans votre HTML, structure simplifiée -->
 <div class="services-box">
-    <div class="services-title">
-        Pa bliye nou gen Sèvis:
-    </div>
+    <div class="services-title">Pa bliye nou gen Sèvis:</div>
     
-    <div class="services-two-columns">
-        <div class="services-column">
+    <div style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
+        <div style="flex: 1; width: 50%;">
             <div>✓ MoneyGram</div>
             <div>✓ Unitransfer (Ria)</div>
             <div>✓ CamTransfer</div>
@@ -131,10 +110,13 @@ function generateReceipt(){
             <div>✓ MonCash, NatCash, LajanCash</div>
             <div>✓ Depo US$ Haiti</div>
         </div>
-        <div class="services-column">
+        <div style="flex: 1; width: 50%;">
             <div>✓ Xerox</div>
             <div>✓ Imprimir</div>
             <div>✓ Plastificar</div>
+            <div>✓ Photo 3/4, 4/6, A4</div>
+            <div>✓ Declaração de endereço</div> 
+            <div>✓ Antecedentes criminais</div>
         </div>
     </div>
 </div>
@@ -282,3 +264,306 @@ function showInstallPromotion() {
     }
   }, 10000);
 }
+
+// Fonction pour vérifier les données requises
+function validateReceiptData(reference, numero) {
+    // Vérifie si la référence est manquante ou vide
+    if (!reference || reference.trim() === "") {
+        showErrorMessage("Les données ne sont pas complètement copiées depuis Ding");
+        return false;
+    }
+    
+    // Vérifie si le numéro est manquant ou vide
+    if (!numero || numero.trim() === "") {
+        showErrorMessage("Les données ne sont pas complètement copiées depuis Ding");
+        return false;
+    }
+    
+    return true;
+}
+
+// Fonction pour afficher le message d'erreur
+function showErrorMessage(message) {
+    // Crée ou récupère le conteneur d'erreur
+    let errorDiv = document.getElementById("errorMessage");
+    
+    if (!errorDiv) {
+        errorDiv = document.createElement("div");
+        errorDiv.id = "errorMessage";
+        errorDiv.style.cssText = `
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            animation: slideIn 0.5s ease;
+        `;
+        
+        // Ajoute l'animation CSS
+        if (!document.querySelector("#errorAnimation")) {
+            const style = document.createElement("style");
+            style.id = "errorAnimation";
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateY(-20px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Insère avant le bouton de génération
+        const generateBtn = document.querySelector(".generate-btn");
+        generateBtn.parentNode.insertBefore(errorDiv, generateBtn.nextSibling);
+    }
+    
+    errorDiv.textContent = message;
+    errorDiv.style.display = "block";
+    
+    // Cache le message après 5 secondes
+    setTimeout(() => {
+        if (errorDiv) {
+            errorDiv.style.opacity = "0";
+            setTimeout(() => {
+                if (errorDiv) {
+                    errorDiv.style.display = "none";
+                    errorDiv.style.opacity = "1";
+                }
+            }, 500);
+        }
+    }, 5000);
+}
+
+// Fonction pour effacer le message d'erreur
+function clearErrorMessage() {
+    const errorDiv = document.getElementById("errorMessage");
+    if (errorDiv) {
+        errorDiv.style.display = "none";
+    }
+}
+// Fonction pour vérifier et demander la valeur ajoutée
+// Fonction pour vérifier et demander la valeur ajoutée
+function checkAndRequestExtraValue() {
+    const extraValueInput = document.getElementById("extraValue");
+    const rawText = document.getElementById("rawText").value;
+    
+    // Vérifie si le texte a été collé
+    if (!rawText || rawText.trim() === "") {
+        return;
+    }
+    
+    // Vérifie si l'utilisateur a déjà interagi avec le champ
+    const alreadyInteracted = extraValueInput.hasAttribute("data-interacted");
+    
+    // Si déjà interacté, ne pas demander à nouveau
+    if (alreadyInteracted) {
+        return;
+    }
+    
+    // Récupère la valeur actuelle
+    let currentValue = parseFloat(extraValueInput.value) || 0;
+    
+    // Si la valeur est 0, demande à l'utilisateur une seule fois
+    if (currentValue === 0) {
+        // Fait clignoter le champ en rouge
+        blinkRedInput(extraValueInput);
+        
+        // Affiche une boîte de dialogue personnalisée
+        const userValue = prompt(
+            "⚠️ AJOUTER LA VALEUR ENLEVÉE ⚠️\n\n" +
+            "Veuillez entrer le montant à ajouter (BRL):\n" +
+            "(Exemple: 50, 100.50, etc.)\n\n" +
+            "Entrez 0 si aucun montant à ajouter"
+        );
+        
+        if (userValue !== null) {
+            let parsedValue = parseFloat(userValue.replace(",", "."));
+            if (!isNaN(parsedValue)) {
+                extraValueInput.value = parsedValue;
+                // Marque comme interacté
+                extraValueInput.setAttribute("data-interacted", "true");
+                // Enlève le rouge si une valeur est entrée
+                if (parsedValue !== 0) {
+                    removeRedHighlight(extraValueInput);
+                }
+            } else {
+                // Si valeur invalide, met 0 et marque comme interacté
+                extraValueInput.value = 0;
+                extraValueInput.setAttribute("data-interacted", "true");
+                alert("Valeur invalide. 0 sera utilisé.");
+            }
+        } else {
+            // Si l'utilisateur annule, marque comme interacté avec 0
+            extraValueInput.setAttribute("data-interacted", "true");
+        }
+    }
+}
+
+
+
+// Fonction pour faire clignoter l'input en rouge
+function blinkRedInput(inputElement) {
+    // Enlève les classes existantes
+    inputElement.classList.remove("red-highlight", "blink-animation");
+    
+    // Force le reflow
+    void inputElement.offsetWidth;
+    
+    // Ajoute la classe d'animation
+    inputElement.classList.add("red-highlight", "blink-animation");
+    
+    // Compte les clignotements (5 fois)
+    let blinks = 0;
+    const blinkInterval = setInterval(() => {
+        if (blinks >= 5) {
+            clearInterval(blinkInterval);
+            // Enlève l'animation mais garde le rouge si toujours 0
+            inputElement.classList.remove("blink-animation");
+            if (parseFloat(inputElement.value) === 0) {
+                inputElement.classList.add("red-highlight");
+            }
+        }
+        blinks++;
+    }, 500);
+}
+
+// Fonction pour enlever le surlignage rouge
+function removeRedHighlight(inputElement) {
+    inputElement.classList.remove("red-highlight", "blink-animation");
+    inputElement.style.transition = "all 0.3s ease";
+}
+
+// Fonction pour vérifier avant génération
+function validateExtraValueBeforeGenerate() {
+    const extraValueInput = document.getElementById("extraValue");
+    const currentValue = parseFloat(extraValueInput.value) || 0;
+    
+    if (currentValue === 0) {
+        // Demande simplement confirmation sans bloquer
+        const confirmGenerate = confirm(
+            "Le montant ajouté est 0 BRL.\n\n" +
+            "Voulez-vous générer le reçu ?"
+        );
+        
+        if (confirmGenerate) {
+            removeRedHighlight(extraValueInput);
+            return true;  // Accepte la génération avec 0
+        } else {
+            extraValueInput.focus();
+            return false;  // Annule la génération
+        }
+    }
+    
+    return true;  // Valeur non-zero, accepter
+}
+// ============================================
+// ÉCOUTEURS D'ÉVÉNEMENTS POUR LE COLLAGE
+// ============================================
+
+// Attendre que la page soit complètement chargée
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // 1. Écouteur pour le champ textarea (coller du texte)
+    const rawTextArea = document.getElementById("rawText");
+    if (rawTextArea) {
+        rawTextArea.addEventListener("paste", function(e) {
+            // Petite pause pour que le texte soit bien collé
+            setTimeout(() => {
+                checkAndRequestExtraValue();
+            }, 100);
+        });
+        
+        // 2. Écouteur pour quand l'utilisateur tape ou colle avec la souris
+        rawTextArea.addEventListener("input", function() {
+            // Vérifie si le texte est suffisamment long (signe d'un collage)
+            if (this.value.length > 30) {
+                checkAndRequestExtraValue();
+            }
+        });
+        
+        // 3. Écouteur pour quand l'utilisateur quitte le champ
+        rawTextArea.addEventListener("blur", function() {
+            if (this.value.length > 0) {
+                checkAndRequestExtraValue();
+            }
+        });
+    }
+    
+    // 4. Écouteur pour le champ extraValue (quand l'utilisateur change la valeur)
+    const extraValueInput = document.getElementById("extraValue");
+    if (extraValueInput) {
+        extraValueInput.addEventListener("change", function() {
+            if (parseFloat(this.value) !== 0) {
+                removeRedHighlight(this);
+            } else {
+                blinkRedInput(this);
+            }
+        });
+        
+        // 5. Quand l'utilisateur tape dans le champ extraValue
+        extraValueInput.addEventListener("input", function() {
+            if (parseFloat(this.value) !== 0) {
+                removeRedHighlight(this);
+            }
+        });
+    }
+    
+    // 6. Écouteur global pour le raccourci clavier Ctrl+V (coller)
+    document.addEventListener("keydown", function(e) {
+        // Vérifie si Ctrl+V (ou Cmd+V sur Mac) est pressé
+        if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+            // Vérifie si le focus est sur le textarea
+            if (document.activeElement === rawTextArea) {
+                setTimeout(() => {
+                    checkAndRequestExtraValue();
+                }, 50);
+            }
+        }
+    });
+    
+    // 7. Option: Détecter le collage via le menu contextuel (clic droit > coller)
+    rawTextArea.addEventListener("mouseup", function() {
+        // Vérifie si le texte a changé récemment
+        setTimeout(() => {
+            if (this.value.length > 30) {
+                checkAndRequestExtraValue();
+            }
+        }, 50);
+    });
+});
+
+// ============================================
+// FONCTION POUR FORCER LA VÉRIFICATION MANUELLEMENT
+// ============================================
+
+// Ajoute un bouton optionnel pour vérifier manuellement
+function addManualCheckButton() {
+    const extraValueInput = document.getElementById("extraValue");
+    const parentDiv = extraValueInput.parentNode;
+    
+    // Crée un petit bouton d'aide
+    const helpButton = document.createElement("small");
+    helpButton.textContent = " ⚠️ Ajouter valeur";
+    helpButton.style.cursor = "pointer";
+    helpButton.style.color = "#ff0000";
+    helpButton.style.fontSize = "12px";
+    helpButton.style.marginLeft = "10px";
+    helpButton.title = "Cliquez pour ajouter la valeur enlevée";
+    
+    helpButton.onclick = function() {
+        checkAndRequestExtraValue();
+    };
+    
+    parentDiv.appendChild(helpButton);
+}
+
+// Appeler cette fonction après le chargement
+setTimeout(addManualCheckButton, 1000);

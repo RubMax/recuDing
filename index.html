@@ -24,7 +24,12 @@
 
     <textarea id="rawText" placeholder="Collez le texte du reçu ici..."></textarea>
 
+    <div style="position: relative;">
     <input type="number" id="extraValue" placeholder="Montant à ajouter (BRL)" value="0">
+    <span id="extraValueWarning" style="display: none; color: #ff0000; font-size: 12px; margin-top: 5px; display: block;">
+        ⚠️ Veuillez ajouter le montant enlevé !
+    </span>
+</div>
 
     <button class="generate-btn" onclick="generateReceipt()">
         Générer le reçu
