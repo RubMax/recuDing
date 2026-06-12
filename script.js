@@ -48,8 +48,8 @@ function generateReceipt() {
     // Le reste de votre code de génération...
     document.getElementById("receiptContainer").innerHTML = `
         <div id="receipt">
-            <div class="success-circle">✓</div>
-            <div class="receipt-title">CONFIRMATION DE COMMANDE</div>
+            <div class="services-title">RubMax Recargar internacional</div>
+            <div class="receipt-title">Confimation Commande</div>
             <div class="separator"></div>
 
             <div class="row">
