@@ -409,6 +409,9 @@ function checkAndRequestExtraValue() {
                 if (parsedValue !== 0) {
                     removeRedHighlight(extraValueInput);
                 }
+                setTimeout(() => {
+        generateReceipt();
+    }, 300);
             } else {
                 // Si valeur invalide, met 0 et marque comme interacté
                 extraValueInput.value = 0;
