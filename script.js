@@ -99,7 +99,7 @@ function generateReceipt() {
 
 <!-- Dans votre HTML, structure simplifiée -->
 <div class="services-box">
-    <div class="services-title">Pa bliye nou gen Sèvis:</div>
+    <div class="services-title">SERVIÇOS:</div>
     
     <div style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
         <div style="flex: 1; width: 50%;">
@@ -379,8 +379,6 @@ function checkAndRequestExtraValue() {
         // Affiche une boîte de dialogue personnalisée
         const userValue = prompt(
             "⚠️ AJOUTER LA VALEUR ENLEVÉE ⚠️\n\n" +
-            "Veuillez entrer le montant à ajouter (BRL):\n" +
-            "(Exemple: 50, 100.50, etc.)\n\n" +
             "Entrez 0 si aucun montant à ajouter"
         );
         
