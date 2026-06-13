@@ -49,7 +49,7 @@ function generateReceipt() {
     document.getElementById("receiptContainer").innerHTML = `
         <div id="receipt">
             <div class="services-title">RubMax Recargar internacional</div>
-            <div class="receipt-title">Confimation Commande</div>
+            <div class="receipt-title">CONFIRMATION DE COMMANDE</div>
             <div class="separator"></div>
 
             <div class="row">
