@@ -45,6 +45,23 @@ function generateReceipt() {
     const total = brl + extra;
     const montantFinal = total.toFixed(2).replace(".", ",") + " BRL";
 
+    // =====================================
+// CONFIRMATION DU MONTANT DE RECHARGE
+// =====================================
+
+const confirmationRecharge = confirm(
+`CONFIRMATION DE RECHARGE
+
+Montant envoyen est: ${brl.toFixed(2)} BRL
+
+Mais, TOTAL À RECHARGER: ${total.toFixed(2)} BRL ?
+`
+);
+
+if (!confirmationRecharge) {
+    return;
+}
+
     // Le reste de votre code de génération...
     document.getElementById("receiptContainer").innerHTML = `
         <div id="receipt">
