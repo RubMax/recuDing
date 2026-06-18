@@ -22,31 +22,42 @@
 
     <h1>Générateur de Reçu</h1>
 
-    <textarea id="rawText" placeholder="Collez le texte du reçu ici..."></textarea>
+    <div class="app-layout">
 
-    <div style="position: relative;">
-    <input type="number" id="extraValue" placeholder="Montant à ajouter (BRL)" value="0">
-    <span id="extraValueWarning" style="display: none; color: #ff0000; font-size: 12px; margin-top: 5px; display: block;">
-        ⚠️ Veuillez ajouter le montant enlevé !
-    </span>
-</div>
+    <!-- COLONNE GAUCHE -->
+    <div id="inputSection" class="input-section">
 
-    <button class="generate-btn" onclick="generateReceipt()">
-        Générer le reçu
-    </button>
+        <!-- Tout ton formulaire actuel -->
+        <textarea id="rawText"></textarea>
 
-    
+        <input type="number" id="extraValue">
 
-    <div id="receiptContainer"></div>
-
-    <div class="actions">
-        <button onclick="downloadReceipt()">
-            📥 Télécharger PNG
+        <button class="generate-btn" onclick="generateReceipt()">
+            Générer le reçu
         </button>
 
-        <button onclick="shareReceipt()">
-            📱 Partager WhatsApp
-        </button>
+    </div>
+
+    <!-- COLONNE DROITE -->
+    <div class="receipt-section">
+
+        <div id="receiptContainer"></div>
+
+        <div id="receiptButtons" class="receipt-buttons">
+            <button id="backBtn" onclick="showInputSection()">
+⬅️ Nouveau reçu
+</button>
+
+            <button onclick="downloadReceipt()">
+                📥 Télécharger PNG
+            </button>
+
+            <button onclick="shareReceipt()">
+                📱 WhatsApp
+            </button>
+
+        </div>
+
     </div>
 
 </div>

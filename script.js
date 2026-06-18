@@ -39,6 +39,7 @@ function generateReceipt() {
         document.getElementById("receiptContainer").innerHTML = "";
         return;
     }
+    hideInputOnMobile();
 
     let brl = montantEnvoye.replace("BRL", "").replace(",", ".").trim();
     brl = parseFloat(brl);
@@ -50,11 +51,8 @@ function generateReceipt() {
 // =====================================
 
 const confirmationRecharge = confirm(
-`CONFIRMATION DE RECHARGE
-
-Montant envoyen est: ${brl.toFixed(2)} BRL
-
-Mais, TOTAL À RECHARGER: ${total.toFixed(2)} BRL ?
+`
+TOTAL RECHARGER: ${total.toFixed(2)} BRL ?
 `
 );
 
@@ -405,13 +403,12 @@ function checkAndRequestExtraValue() {
                 extraValueInput.value = parsedValue;
                 // Marque comme interacté
                 extraValueInput.setAttribute("data-interacted", "true");
+
                 // Enlève le rouge si une valeur est entrée
                 if (parsedValue !== 0) {
                     removeRedHighlight(extraValueInput);
                 }
-                setTimeout(() => {
-        generateReceipt();
-    }, 300);
+                showRechargeConfirmation();
             } else {
                 // Si valeur invalide, met 0 et marque comme interacté
                 extraValueInput.value = 0;
@@ -585,3 +582,95 @@ function addManualCheckButton() {
 
 // Appeler cette fonction après le chargement
 setTimeout(addManualCheckButton, 1000);
+
+
+function hideInputOnMobile(){
+
+    if(window.innerWidth <= 768){
+
+        document.getElementById("inputSection").style.display = "none";
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+
+}
+function showInputSection(){
+
+    // Réafficher le formulaire
+    document.getElementById("inputSection").style.display = "block";
+
+    // Vider les champs
+    document.getElementById("rawText").value = "";
+    document.getElementById("extraValue").value = 0;
+
+    // Réinitialiser les indicateurs
+    document.getElementById("extraValue")
+        .removeAttribute("data-interacted");
+
+    // Enlever les styles d'alerte
+    removeRedHighlight(
+        document.getElementById("extraValue")
+    );
+
+    // Supprimer le reçu affiché
+    document.getElementById("receiptContainer").innerHTML = "";
+
+    // Effacer les messages d'erreur
+    clearErrorMessage();
+
+    // Retour en haut de la page
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+    // Donner le focus à la zone de collage
+    document.getElementById("rawText").focus();
+}
+function showRechargeConfirmation() {
+
+    const raw = document.getElementById("rawText").value;
+
+    if (!raw.trim()) return;
+
+    const extra = parseFloat(
+        document.getElementById("extraValue").value
+    ) || 0;
+
+    const lines = raw
+        .split("\n")
+        .map(x => x.trim())
+        .filter(x => x);
+
+    const montantEnvoye = getValue(
+        lines,
+        "Montant envoyé"
+    );
+
+    let brl = montantEnvoye
+        .replace("BRL", "")
+        .replace(",", ".")
+        .trim();
+
+    brl = parseFloat(brl);
+
+    const total = brl + extra;
+
+    const ok = confirm(
+`CONFIRMATION DE RECHARGE
+
+Montant Ding :${brl.toFixed(2)} BRL
+Montant ajouté :${extra.toFixed(2)} BRL
+TOTAL :${total.toFixed(2)} BRL
+
+Le client demande-t-il une recharge de ${total.toFixed(2)} BRL ?`
+    );
+
+    if (ok) {
+        generateReceipt();
+    }
+}

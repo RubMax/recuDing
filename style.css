@@ -367,3 +367,72 @@ button{
     border-color: #00a651;
     box-shadow: 0 0 5px rgba(0, 166, 81, 0.3);
 }
+/* ==============================
+   LAYOUT PRINCIPAL
+============================== */
+
+.app-layout{
+    display:flex;
+    gap:20px;
+    width:100%;
+}
+
+/* ==============================
+   PC = 50% / 50%
+============================== */
+
+.input-section{
+    width:50%;
+}
+
+.receipt-section{
+    width:50%;
+}
+
+.receipt-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.receipt-buttons button{
+    flex:1;
+}
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media (max-width:768px){
+
+    .app-layout{
+        flex-direction:column;
+    }
+
+    .input-section,
+    .receipt-section{
+        width:100%;
+    }
+
+    .receipt-buttons{
+        position:sticky;
+        bottom:0;
+        background:white;
+        padding:10px;
+        border-top:1px solid #ddd;
+    }
+
+}
+#backBtn{
+    display:none;
+}
+
+@media (max-width:768px){
+
+    #backBtn{
+        display:block;
+        width:100%;
+        margin-top:10px;
+    }
+
+}
