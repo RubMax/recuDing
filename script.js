@@ -11,6 +11,9 @@ function getValue(lines, label){
     return "";
 }
 
+
+
+
 function generateReceipt() {
     // Efface les messages d'erreur précédents
     clearErrorMessage();
@@ -36,6 +39,7 @@ function generateReceipt() {
 
     // Validation des données
     if (!validateReceiptData(reference, numero)) {
+
         document.getElementById("receiptContainer").innerHTML = "";
         return;
     }
@@ -106,35 +110,14 @@ if (!confirmationRecharge) {
 
             <div class="separator"></div>
 
-        <div class="footer-links">
+        <div class="footer-links ${servicesHTML ? 'with-services' : ''}">
     <span>Impression d'un reçu</span>
     <span>Envoi du reçu par SMS</span>
 </div>
 
 
 <!-- Dans votre HTML, structure simplifiée -->
-<div class="services-box">
-    <div class="services-title">SERVIÇOS:</div>
-    
-    <div style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
-        <div style="flex: 1; width: 50%;">
-            <div>✓ MoneyGram</div>
-            <div>✓ Unitransfer (Ria)</div>
-            <div>✓ CamTransfer</div>
-            <div>✓ Western Union</div>
-            <div>✓ MonCash, NatCash, LajanCash</div>
-            <div>✓ Depo US$ Haiti</div>
-        </div>
-        <div style="flex: 1; width: 50%;">
-            <div>✓ Xerox</div>
-            <div>✓ Imprimir</div>
-            <div>✓ Plastificar</div>
-            <div>✓ Photo 3/4, 4/6, A4</div>
-            <div>✓ Declaração de endereço</div> 
-            <div>✓ Antecedentes criminais</div>
-        </div>
-    </div>
-</div>
+${servicesHTML}
     </div>
     
     `;
@@ -582,7 +565,75 @@ function addManualCheckButton() {
 
 // Appeler cette fonction après le chargement
 setTimeout(addManualCheckButton, 1000);
+// =============================
+// SERVICES OPTIONNELS
+// =============================
 
+const leftServices = document
+.getElementById("servicesLeft")
+.value
+.trim();
+
+const rightServices = document
+.getElementById("servicesRight")
+.value
+.trim();
+
+let servicesHTML = "";
+let footerMargin = "";
+
+if(leftServices !== "" || rightServices !== ""){
+    footerMargin = "margin-bottom:15px;";
+
+    let leftHTML = "";
+    let rightHTML = "";
+
+    if(leftServices !== ""){
+
+        leftServices.split("\n").forEach(item=>{
+
+            if(item.trim()!=""){
+                leftHTML += `<div>✓ ${item}</div>`;
+            }
+
+        });
+
+    }
+
+    if(rightServices !== ""){
+
+        rightServices.split("\n").forEach(item=>{
+
+            if(item.trim()!=""){
+                rightHTML += `<div>✓ ${item}</div>`;
+            }
+
+        });
+
+    }
+
+    servicesHTML = `
+    <div class="services-box">
+
+        <div class="services-title">
+            SERVIÇOS
+        </div>
+
+        <div style="display:flex;gap:10px;">
+
+            <div style="flex:1">
+                ${leftHTML}
+            </div>
+
+            <div style="flex:1">
+                ${rightHTML}
+            </div>
+
+        </div>
+
+    </div>
+    `;
+}
 
 function hideInputOnMobile(){
 
