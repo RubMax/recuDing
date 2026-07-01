@@ -55,41 +55,44 @@ placeholder="0.00">
 
 <h3>Services à afficher (optionnel)</h3>
 
-<div class="services-editor">
+<!-- =========================
+     SERVICES OPTIONNELS
+========================= -->
 
-<div>
-
-<label>Colonne gauche</label>
-
-<textarea
-id="servicesLeft"
-rows="8"
-placeholder="MoneyGram
+<div class="services-toggle-container">
+    <button class="services-toggle-btn" onclick="toggleServices()">
+        ▶ Services à afficher (optionnel)
+    </button>
+    
+    <div id="servicesContent" class="services-content hidden">
+        <div class="services-editor">
+            <div>
+                <label>Colonne gauche</label>
+                <textarea
+                    id="servicesLeft"
+                    rows="8"
+                    placeholder="MoneyGram
 Unitransfer (Ria)
 CamTransfer
 Western Union
 MonCash
 NatCash
 LajanCash"></textarea>
-
-</div>
-
-<div>
-
-<label>Colonne droite</label>
-
-<textarea
-id="servicesRight"
-rows="8"
-placeholder="Xerox
+            </div>
+            <div>
+                <label>Colonne droite</label>
+                <textarea
+                    id="servicesRight"
+                    rows="8"
+                    placeholder="Xerox
 Imprimer
 Plastifier
 Photo 3x4
 Déclaration
 Casier judiciaire"></textarea>
-
-</div>
-
+            </div>
+        </div>
+    </div>
 </div>
 
 <button
@@ -215,6 +218,10 @@ if (!confirmationRecharge) {
 // SERVICES OPTIONNELS
 // =============================
 
+// =============================
+// SERVICES OPTIONNELS
+// =============================
+
 const leftServices = document
 .getElementById("servicesLeft")
 .value
@@ -236,56 +243,61 @@ if(leftServices !== "" || rightServices !== ""){
     let rightHTML = "";
 
     if(leftServices !== ""){
-
-        leftServices.split("\n").forEach(item=>{
-
-            if(item.trim()!=""){
-                leftHTML += `<div>✓ ${item}</div>`;
+        leftServices.split("\n").forEach(item => {
+            let text = item.trim();
+            if(text !== ""){
+                // Vérifier si le service est entre *
+                if(text.startsWith("*") && text.endsWith("*")) {
+                    // Enlever les * et mettre en majuscules
+                    const titleText = text.substring(1, text.length - 1).trim().toUpperCase();
+                    leftHTML += `<div class="service-title">${titleText}</div>`;
+                } else {
+                    leftHTML += `<div>✓ ${text}</div>`;
+                }
             }
-
         });
-
     }
 
     if(rightServices !== ""){
-
-        rightServices.split("\n").forEach(item=>{
-
-            if(item.trim()!=""){
-                rightHTML += `<div>✓ ${item}</div>`;
+        rightServices.split("\n").forEach(item => {
+            let text = item.trim();
+            if(text !== ""){
+                // Vérifier si le service est entre *
+                if(text.startsWith("*") && text.endsWith("*")) {
+                    // Enlever les * et mettre en majuscules
+                    const titleText = text.substring(1, text.length - 1).trim().toUpperCase();
+                    rightHTML += `<div class="service-title">${titleText}</div>`;
+                } else {
+                    rightHTML += `<div>✓ ${text}</div>`;
+                }
             }
-
         });
-
     }
 
     // Ne génère la section services que si au moins un élément existe
     if(leftHTML !== "" || rightHTML !== ""){
+        // Détermine la classe pour la disposition des colonnes
+        let columnClass = "services-two-columns";
+        
+        // Si une seule colonne est remplie, on utilise une classe pour qu'elle prenne toute la largeur
+        if(leftHTML !== "" && rightHTML === ""){
+            columnClass = "services-single-column-left";
+        } else if(leftHTML === "" && rightHTML !== ""){
+            columnClass = "services-single-column-right";
+        }
+
         servicesHTML = `
         <div class="services-box">
-
-            <div class="services-title">
-                SERVIÇOS
+            <div class="services-title">SERVIÇOS</div>
+            <div class="${columnClass}">
+                ${leftHTML !== "" ? `<div class="services-column">${leftHTML}</div>` : ''}
+                ${rightHTML !== "" ? `<div class="services-column">${rightHTML}</div>` : ''}
             </div>
-
-            <div style="display:flex;gap:10px;">
-
-                <div style="flex:1">
-                    ${leftHTML}
-                </div>
-
-                <div style="flex:1">
-                    ${rightHTML}
-                </div>
-
-            </div>
-
         </div>
         `;
         receiptExtraClass = "with-services";
     }
 }
-
     // Le reste de votre code de génération...
     document.getElementById("receiptContainer").innerHTML = `
         <div id="receipt" class="${receiptExtraClass}">
@@ -786,6 +798,54 @@ function addManualCheckButton() {
 // Appeler cette fonction après le chargement
 setTimeout(addManualCheckButton, 1000);
 
+// ==============================
+// TOGGLE SERVICES
+// ==============================
+
+function toggleServices() {
+    const content = document.getElementById('servicesContent');
+    const btn = document.querySelector('.services-toggle-btn');
+    const icon = btn.querySelector('.toggle-icon');
+    
+    // Basculer la classe open/hidden
+    content.classList.toggle('open');
+    content.classList.toggle('hidden');
+    
+    // Changer l'icône
+    if (content.classList.contains('open')) {
+        icon.textContent = '▼';
+        icon.classList.add('open');
+    } else {
+        icon.textContent = '▶';
+        icon.classList.remove('open');
+    }
+}
+
+// Optionnel : Garder les services ouverts si des valeurs sont présentes
+document.addEventListener('DOMContentLoaded', function() {
+    const servicesLeft = document.getElementById('servicesLeft');
+    const servicesRight = document.getElementById('servicesRight');
+    
+    // Si des services sont déjà remplis, ouvrir automatiquement
+    if (servicesLeft.value.trim() !== '' || servicesRight.value.trim() !== '') {
+        const content = document.getElementById('servicesContent');
+        const btn = document.querySelector('.services-toggle-btn');
+        const icon = btn.querySelector('.toggle-icon');
+        
+        content.classList.add('open');
+        content.classList.remove('hidden');
+        icon.textContent = '▼';
+        icon.classList.add('open');
+    }
+});
+// Dans la fonction generateReceipt(), après récupération des services,
+// ajouter cette vérification pour éviter les erreurs si les textareas n'existent pas
+
+const leftServicesElem = document.getElementById("servicesLeft");
+const rightServicesElem = document.getElementById("servicesRight");
+
+const leftServices = leftServicesElem ? leftServicesElem.value.trim() : "";
+const rightServices = rightServicesElem ? rightServicesElem.value.trim() : "";
 function hideInputOnMobile(){
 
     if(window.innerWidth <= 768){
@@ -1221,6 +1281,18 @@ button{
     margin-bottom:4px;
 }
 
+/* Styles pour une seule colonne (prend toute la largeur) */
+.services-single-column-left,
+.services-single-column-right {
+    display: flex;
+    gap: 12px;
+}
+
+.services-single-column-left .services-column,
+.services-single-column-right .services-column {
+    flex: 1;
+}
+
 /* Version responsive pour mobile */
 @media (max-width: 600px) {
     .services-two-columns {
@@ -1341,6 +1413,121 @@ button{
     }
 
 }
+/* Style pour les titres de services entre * */
+.service-title {
+    font-weight: bold;
+    color: #000000;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+/* Ajustement pour mobile */
+@media (max-width: 600px) {
+    .service-title {
+        font-size: 1em;
+        text-align: center;
+    }
+}
+/* ==============================
+   SERVICES TOGGLE BUTTON
+============================== */
+
+.services-toggle-container {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.services-toggle-btn {
+    width: 100%;
+    padding: 12px 15px;
+    background: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.services-toggle-btn:hover {
+    background: #e0e0e0;
+}
+
+.services-toggle-btn .toggle-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.services-toggle-btn .toggle-icon.open {
+    transform: rotate(90deg);
+}
+
+.services-content {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.3s ease;
+    margin-top: 0;
+}
+
+.services-content.open {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 12px;
+}
+
+.services-content.hidden {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+}
+
+/* Style pour le conteneur des services */
+.services-editor {
+    display: flex;
+    gap: 15px;
+}
+
+.services-editor > div {
+    flex: 1;
+}
+
+.services-editor label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 10px;
+}
+
+.services-editor textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    font-size: 10px;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    .services-editor {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .services-editor textarea {
+        min-height: 120px;
+    }
+}
 </style>
 </body>
-</html>
+</html> 
